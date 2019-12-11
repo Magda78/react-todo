@@ -1,0 +1,15 @@
+.submitForm {
+    display: grid;
+    grid-template-rows: 2;
+    row-gap: 0.5rem;
+    border: #d6e9ff solid 0.1rem;
+    padding: 0.5rem;
+}
+
+button {
+    background-color: #2196f3;
+}
+
+input {
+    border: #d6e9ff solid 0.1rem;
+}

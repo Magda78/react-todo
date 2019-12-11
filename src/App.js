@@ -1,62 +1,82 @@
-import React, {Component} from 'react';
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { Component } from "react";
 import ToDoInput from "./components/ToDoInput";
 import ToDoList from "./components/ToDoList";
-import uuid from 'uuid'
+import uuid from "uuid";
+import "./App.css";
+
 
 class App extends Component {
   state = {
-    items: [
-      {id: '1', title: 'wake up'},
-      {id: '2', title: 'breakfast'}
-    ],
-    id: uuid(),
-    item:'',
-    edititem: false
+    items: [],
+    item: '',
+    id: uuid()
   }
 
-  handleChange = (e) => {
-    console.log('change');
+  changeHandler = (event) => {
+    this.setState({item: event.target.value});
   }
 
-  handleSubmit = (e) => {
-      console.log('sub');
+  submitHandler = (e) => {
+    e.preventDefault();
+    const newItem = {
+      id: this.state.id,
+      title: this.state.item
+    };
+    const updateItems = [...this.state.items, newItem];
+    this.setState({
+      items: updateItems,
+      id: uuid(),
+      item:'',
+      editItem: false
+    })
+    console.log("click")
   }
 
-  clearList = () => {
-    console.log('clear');
+  clearHandler = () => {
+    this.setState({items: []});
   }
 
-  handleDelete = (id) => {
-    console.log('delete');
+  deleteHandler = (id) => {
+    const filteredItems = this.state.items.filter(item => item.id !== id);
+    
+    this.setState({
+      items: filteredItems
+    });
+    
   }
 
-  handleEdit = (id) => {
+  editHandler = id => {
+    const filteredItems = this.state.items.filter(item => item.id !== id);
+    const selectedItem = this.state.items.find(item => item.id === id);
+    this.setState({
+      items: filteredItems,
+      item: selectedItem.title,
+      id: id,
+      editItem: true
+    });
+  };
 
-  }
   render() {
-
-  return (
-    <div className='container'>
-      <div className='row'>
-        <div className='col-10 mx-auto col-md-8 mt-5'>
-          <h3 className='text-capitalize text-center'>Todo Input</h3>
+    return (
+      <div className="App">
+        <h4>ToDo Input</h4>
+        <div className="content">
           <ToDoInput 
-          item={this.state.item} 
-          handleChange={this.handleChange} 
-          handleSubmit={this.handleSubmit} 
-          edititem={this.handleEdit}/>
+          submitHandler={this.submitHandler} 
+          changeHandler={this.changeHandler}
+          item={this.state.item}
+          />
+
           <ToDoList 
-          items={this.state.items}
-          clear={this.state.clearList}
-          handleDelete={this.handleDelete}
-          handleEdit={this.handleEdit}/>
+          items={this.state.items} 
+          clearHandler={this.clearHandler} 
+          deleteHandler={this.deleteHandler}
+          editHandler={this.editHandler}
+          />
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 }
 
 export default App;
